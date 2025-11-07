@@ -1,0 +1,26 @@
+# Exclude example app entirely from npm package
+example/
+
+# Common junk / logs
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Tests and coverage (not published)
+__tests__/
+coverage/
+
+# Editor / tooling configs (not needed by consumers)
+.vscode/
+
+# Build caches
+.turbo/
+
+# iOS/Android build outputs inside the library (defensive; also handled by package.json files field)
+android/build/
+ios/build/
+ios/Pods/
+
+# Git metadata (defensive)
+.git/
+.gitmodules

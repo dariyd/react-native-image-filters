@@ -1,0 +1,84 @@
+buildscript {
+    ext.kotlin_version = '1.9.0'
+    
+    repositories {
+        google()
+        mavenCentral()
+    }
+    
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+// Enable React Native Gradle plugin for codegen/new architecture support
+apply plugin: "com.facebook.react"
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+android {
+    compileSdk 34
+    
+    namespace "com.imagefilters"
+    
+    defaultConfig {
+        minSdk 33
+        targetSdk 34
+    }
+    
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    
+    buildFeatures {
+        buildConfig = true
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+// Configure React Native codegen for this library (matches package.json codegenConfig)
+react {
+    libraryName = "react-native-image-filters"
+    codegenJavaPackageName = "com.imagefilters"
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.facebook.react:react-android'
+    implementation 'com.facebook.react:react-native'
+    
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3"
+    
+    // Image loading
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+    
+    // AndroidX
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+}
+

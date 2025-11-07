@@ -1,0 +1,87 @@
+# OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+ios/.xcode.env.local
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+ios/Pods/
+
+# Expo
+.expo/
+web-build/
+
+# Yarn
+.yarn/*
+!.yarn/releases
+
+# Generated files
+lib/
+coverage/
+.turbo/
+
+# VSCode
+.vscode/
+
+# TypeScript
+*.tsbuildinfo
+
+# Example app (ignore build artifacts and installs)
+example/.DS_Store
+example/node_modules/
+example/package-lock.json
+example/yarn-error.log
+example/.expo/
+example/.env*
+
+# Example Android
+example/android/.gradle/
+example/android/.cxx/
+example/android/local.properties
+example/android/build/
+example/android/app/build/
+
+# Example iOS
+example/ios/Pods/
+example/ios/build/
+example/ios/DerivedData/
+

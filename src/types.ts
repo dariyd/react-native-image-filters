@@ -61,6 +61,25 @@ export type FilterName = DocumentFilter | PhotoFilter | 'custom';
 export type ReturnFormat = 'uri' | 'base64' | 'both';
 
 /**
+ * Crop rectangle coordinates
+ */
+export interface CropRect {
+  /** X coordinate (top-left) */
+  x: number;
+  /** Y coordinate (top-left) */
+  y: number;
+  /** Width of crop area */
+  width: number;
+  /** Height of crop area */
+  height: number;
+}
+
+/**
+ * Resize mode for image operations
+ */
+export type ResizeMode = 'cover' | 'contain' | 'stretch';
+
+/**
  * Custom filter parameters for adjustable properties
  */
 export interface CustomFilterParams {
@@ -109,6 +128,54 @@ export interface FilterResult {
   width: number;
   /** Image height in pixels */
   height: number;
+}
+
+/**
+ * Options for cropping an image
+ */
+export interface CropImageOptions {
+  /** Source image URI (local file:// or remote https://) */
+  sourceUri: string;
+  /** Crop rectangle */
+  cropRect: CropRect;
+  /** Output format (default 'uri') */
+  returnFormat?: ReturnFormat;
+  /** Output image quality (0-100, default 90) */
+  quality?: number;
+}
+
+/**
+ * Options for resizing an image
+ */
+export interface ResizeImageOptions {
+  /** Source image URI (local file:// or remote https://) */
+  sourceUri: string;
+  /** Target width in pixels (optional if height is set) */
+  width?: number;
+  /** Target height in pixels (optional if width is set) */
+  height?: number;
+  /** Resize mode (default 'contain') */
+  mode?: ResizeMode;
+  /** Output format (default 'uri') */
+  returnFormat?: ReturnFormat;
+  /** Output image quality (0-100, default 90) */
+  quality?: number;
+}
+
+/**
+ * Options for rotating an image
+ */
+export interface RotateImageOptions {
+  /** Source image URI (local file:// or remote https://) */
+  sourceUri: string;
+  /** Rotation degrees (clockwise) */
+  degrees: number;
+  /** Expand canvas to fit rotated image (default true) */
+  expand?: boolean;
+  /** Output format (default 'uri') */
+  returnFormat?: ReturnFormat;
+  /** Output image quality (0-100, default 90) */
+  quality?: number;
 }
 
 /**
@@ -201,11 +268,38 @@ export interface CacheOptions {
 }
 
 /**
+ * Props for CropperView component
+ */
+export interface CropperViewProps extends ViewProps {
+  /** Image source (local or remote URI) */
+  source: ImageSource;
+  /** Initial crop rectangle (optional) */
+  initialCropRect?: CropRect;
+  /** Fixed aspect ratio (e.g., 16/9, 1 for square, undefined for free) */
+  aspectRatio?: number;
+  /** Minimum crop size */
+  minCropSize?: { width: number; height: number };
+  /** Callback when crop rectangle changes */
+  onCropRectChange?: (rect: CropRect) => void;
+  /** Callback when user finishes gesture */
+  onGestureEnd?: (rect: CropRect) => void;
+  /** Show grid overlay */
+  showGrid?: boolean;
+  /** Grid color */
+  gridColor?: string;
+  /** Overlay color */
+  overlayColor?: string;
+}
+
+/**
  * Native module spec interface
  */
 export interface NativeImageFiltersSpec {
   applyFilter(options: Record<string, any>): Promise<Record<string, any>>;
   applyFilters(optionsArray: Array<Record<string, any>>): Promise<Array<Record<string, any>>>;
+  cropImage(options: Record<string, any>): Promise<Record<string, any>>;
+  resizeImage(options: Record<string, any>): Promise<Record<string, any>>;
+  rotateImage(options: Record<string, any>): Promise<Record<string, any>>;
   getAvailableFilters(type?: string): Promise<string[]>;
   preloadImage(uri: string): Promise<void>;
   clearCache(): Promise<void>;

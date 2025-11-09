@@ -8,6 +8,11 @@ import type {
   FilterMetadata,
   BatchFilterOperation,
   BatchFilterResult,
+  CropImageOptions,
+  ResizeImageOptions,
+  RotateImageOptions,
+  CropRect,
+  ResizeMode,
 } from './types';
 import { DOCUMENT_FILTERS, getDocumentFilterNames } from './filters/documentFilters';
 import { PHOTO_FILTERS, getPhotoFilterNames } from './filters/photoFilters';
@@ -29,6 +34,12 @@ export type {
   DocumentFilter,
   PhotoFilter,
   ReturnFormat,
+  CropImageOptions,
+  ResizeImageOptions,
+  RotateImageOptions,
+  CropRect,
+  ResizeMode,
+  CropperViewProps,
 } from './types';
 
 // Export filter constants
@@ -43,8 +54,9 @@ export {
   getParamDescription,
 } from './filters/customFilters';
 
-// Export component
+// Export components
 export { FilteredImageView } from './FilteredImageView';
+export { CropperView, getCropRect, resetCropRect, setCropRect } from './CropperView';
 
 const LINKING_ERROR =
   `The package 'react-native-image-filters' doesn't seem to be linked. Make sure: \n\n` +
@@ -118,6 +130,90 @@ export async function applyFilters(
     return results as FilterResult[];
   } catch (error) {
     throw new Error(`Failed to apply filters: ${error}`);
+  }
+}
+
+/**
+ * Crop an image to specified rectangle
+ * @param options Crop options
+ * @returns Promise resolving to cropped image result
+ * @example
+ * const result = await cropImage({
+ *   sourceUri: 'file:///path/to/image.jpg',
+ *   cropRect: { x: 100, y: 100, width: 500, height: 500 },
+ *   returnFormat: 'uri',
+ *   quality: 90,
+ * });
+ */
+export async function cropImage(options: CropImageOptions): Promise<FilterResult> {
+  try {
+    const result = await ImageFilters.cropImage({
+      sourceUri: options.sourceUri,
+      cropRect: options.cropRect,
+      returnFormat: options.returnFormat ?? 'uri',
+      quality: options.quality ?? 90,
+    });
+    return result as FilterResult;
+  } catch (error) {
+    throw new Error(`Failed to crop image: ${error}`);
+  }
+}
+
+/**
+ * Resize an image to target dimensions
+ * @param options Resize options
+ * @returns Promise resolving to resized image result
+ * @example
+ * const result = await resizeImage({
+ *   sourceUri: 'file:///path/to/image.jpg',
+ *   width: 1024,
+ *   height: 768,
+ *   mode: 'contain',
+ *   returnFormat: 'uri',
+ *   quality: 90,
+ * });
+ */
+export async function resizeImage(options: ResizeImageOptions): Promise<FilterResult> {
+  try {
+    const result = await ImageFilters.resizeImage({
+      sourceUri: options.sourceUri,
+      width: options.width,
+      height: options.height,
+      mode: options.mode ?? 'contain',
+      returnFormat: options.returnFormat ?? 'uri',
+      quality: options.quality ?? 90,
+    });
+    return result as FilterResult;
+  } catch (error) {
+    throw new Error(`Failed to resize image: ${error}`);
+  }
+}
+
+/**
+ * Rotate an image by specified degrees
+ * @param options Rotation options
+ * @returns Promise resolving to rotated image result
+ * @example
+ * const result = await rotateImage({
+ *   sourceUri: 'file:///path/to/image.jpg',
+ *   degrees: 90,
+ *   expand: true,
+ *   returnFormat: 'uri',
+ *   quality: 90,
+ * });
+ */
+export async function rotateImage(options: RotateImageOptions): Promise<FilterResult> {
+  try {
+    const result = await ImageFilters.rotateImage({
+      sourceUri: options.sourceUri,
+      degrees: options.degrees,
+      expand: options.expand ?? true,
+      returnFormat: options.returnFormat ?? 'uri',
+      quality: options.quality ?? 90,
+    });
+    return result as FilterResult;
+  } catch (error) {
+    throw new Error(`Failed to rotate image: ${error}`);
   }
 }
 
@@ -232,6 +328,9 @@ export function isValidFilter(name: string): boolean {
 export default {
   applyFilter,
   applyFilters,
+  cropImage,
+  resizeImage,
+  rotateImage,
   getAvailableFilters,
   getFilterMetadata,
   getAllFilterMetadata,

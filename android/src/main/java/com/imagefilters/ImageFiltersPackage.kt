@@ -33,7 +33,10 @@ class ImageFiltersPackage : TurboReactPackage() {
     }
     
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return listOf(FilteredImageViewManager(reactContext))
+        return listOf(
+            FilteredImageViewManager(reactContext),
+            CropperViewManager(reactContext)
+        )
     }
 }
 

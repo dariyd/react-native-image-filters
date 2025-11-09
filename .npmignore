@@ -1,5 +1,6 @@
 # Exclude example app entirely from npm package
 example/
+assets/
 
 # Common junk / logs
 npm-debug.log*

@@ -1,6 +1,6 @@
 {
   "name": "react-native-image-filters",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "High-performance GPU-accelerated image filters for React Native with New Architecture support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",

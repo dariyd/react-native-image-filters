@@ -1,6 +1,8 @@
 package com.imagefilters
 
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
 import android.util.Base64
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -101,6 +103,42 @@ class ImageFiltersModule(reactContext: ReactApplicationContext) :
         }
     }
     
+    @ReactMethod
+    override fun cropImage(options: ReadableMap, promise: Promise) {
+        moduleScope.launch {
+            try {
+                val result = processCrop(options)
+                promise.resolve(result)
+            } catch (e: Exception) {
+                promise.reject("CROP_ERROR", e.message, e)
+            }
+        }
+    }
+    
+    @ReactMethod
+    override fun resizeImage(options: ReadableMap, promise: Promise) {
+        moduleScope.launch {
+            try {
+                val result = processResize(options)
+                promise.resolve(result)
+            } catch (e: Exception) {
+                promise.reject("RESIZE_ERROR", e.message, e)
+            }
+        }
+    }
+    
+    @ReactMethod
+    override fun rotateImage(options: ReadableMap, promise: Promise) {
+        moduleScope.launch {
+            try {
+                val result = processRotate(options)
+                promise.resolve(result)
+            } catch (e: Exception) {
+                promise.reject("ROTATE_ERROR", e.message, e)
+            }
+        }
+    }
+    
     // Helper Methods
     
     private suspend fun processFilter(options: ReadableMap): WritableNativeMap = withContext(Dispatchers.IO) {
@@ -191,6 +229,217 @@ class ImageFiltersModule(reactContext: ReactApplicationContext) :
         val q = if (input.isNaN()) 0.9f else input
         val normalized = if (q <= 1f) q * 100f else q
         return normalized.roundToInt().coerceIn(0, 100)
+    }
+    
+    private suspend fun processCrop(options: ReadableMap): WritableNativeMap = withContext(Dispatchers.IO) {
+        val sourceUri = options.getString("sourceUri")
+            ?: throw IllegalArgumentException("sourceUri is required")
+        
+        val cropRect = options.getMap("cropRect")
+            ?: throw IllegalArgumentException("cropRect is required")
+        
+        val x = cropRect.getDouble("x").toInt()
+        val y = cropRect.getDouble("y").toInt()
+        val width = cropRect.getDouble("width").toInt()
+        val height = cropRect.getDouble("height").toInt()
+        
+        val returnFormat = options.getString("returnFormat") ?: "uri"
+        val quality = if (options.hasKey("quality")) {
+            options.getDouble("quality").toFloat()
+        } else {
+            0.9f
+        }
+        
+        // Load image
+        val bitmap = imageLoader.loadImage(sourceUri)
+        
+        // Crop using Bitmap.createBitmap
+        val croppedBitmap = Bitmap.createBitmap(
+            bitmap,
+            x.coerceIn(0, bitmap.width),
+            y.coerceIn(0, bitmap.height),
+            width.coerceAtMost(bitmap.width - x),
+            height.coerceAtMost(bitmap.height - y)
+        )
+        
+        // Prepare result
+        val result = WritableNativeMap()
+        result.putInt("width", croppedBitmap.width)
+        result.putInt("height", croppedBitmap.height)
+        
+        // Save to file if URI format requested
+        if (returnFormat == "uri" || returnFormat == "both") {
+            val fileUri = saveBitmapToTemp(croppedBitmap, quality)
+            result.putString("uri", fileUri)
+        }
+        
+        // Convert to base64 if requested
+        if (returnFormat == "base64" || returnFormat == "both") {
+            val base64 = bitmapToBase64(croppedBitmap, quality)
+            result.putString("base64", base64)
+        }
+        
+        // Clean up
+        if (bitmap != croppedBitmap) {
+            bitmap.recycle()
+        }
+        
+        result
+    }
+    
+    private suspend fun processResize(options: ReadableMap): WritableNativeMap = withContext(Dispatchers.IO) {
+        val sourceUri = options.getString("sourceUri")
+            ?: throw IllegalArgumentException("sourceUri is required")
+        
+        val returnFormat = options.getString("returnFormat") ?: "uri"
+        val quality = if (options.hasKey("quality")) {
+            options.getDouble("quality").toFloat()
+        } else {
+            0.9f
+        }
+        val mode = options.getString("mode") ?: "contain"
+        
+        // Load image
+        val bitmap = imageLoader.loadImage(sourceUri)
+        
+        // Calculate target size
+        val currentWidth = bitmap.width.toFloat()
+        val currentHeight = bitmap.height.toFloat()
+        
+        val targetWidth: Int
+        val targetHeight: Int
+        
+        if (options.hasKey("width")) {
+            val width = options.getDouble("width").toInt()
+            targetWidth = width
+            targetHeight = if (options.hasKey("height")) {
+                options.getDouble("height").toInt()
+            } else {
+                // Maintain aspect ratio
+                (currentHeight * (width / currentWidth)).toInt()
+            }
+        } else if (options.hasKey("height")) {
+            val height = options.getDouble("height").toInt()
+            targetHeight = height
+            targetWidth = (currentWidth * (height / currentHeight)).toInt()
+        } else {
+            throw IllegalArgumentException("width or height is required")
+        }
+        
+        // Apply resize mode
+        val resizedBitmap = when (mode) {
+            "cover" -> {
+                val scale = maxOf(targetWidth / currentWidth, targetHeight / currentHeight)
+                val scaledWidth = (currentWidth * scale).toInt()
+                val scaledHeight = (currentHeight * scale).toInt()
+                val scaled = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true)
+                
+                // Center crop to target size
+                val x = (scaledWidth - targetWidth) / 2
+                val y = (scaledHeight - targetHeight) / 2
+                Bitmap.createBitmap(scaled, x, y, targetWidth, targetHeight)
+            }
+            "stretch" -> {
+                Bitmap.createScaledBitmap(bitmap, targetWidth, targetHeight, true)
+            }
+            else -> { // "contain"
+                val scale = minOf(targetWidth / currentWidth, targetHeight / currentHeight)
+                val scaledWidth = (currentWidth * scale).toInt()
+                val scaledHeight = (currentHeight * scale).toInt()
+                Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true)
+            }
+        }
+        
+        // Prepare result
+        val result = WritableNativeMap()
+        result.putInt("width", resizedBitmap.width)
+        result.putInt("height", resizedBitmap.height)
+        
+        // Save to file if URI format requested
+        if (returnFormat == "uri" || returnFormat == "both") {
+            val fileUri = saveBitmapToTemp(resizedBitmap, quality)
+            result.putString("uri", fileUri)
+        }
+        
+        // Convert to base64 if requested
+        if (returnFormat == "base64" || returnFormat == "both") {
+            val base64 = bitmapToBase64(resizedBitmap, quality)
+            result.putString("base64", base64)
+        }
+        
+        // Clean up
+        if (bitmap != resizedBitmap) {
+            bitmap.recycle()
+        }
+        
+        result
+    }
+    
+    private suspend fun processRotate(options: ReadableMap): WritableNativeMap = withContext(Dispatchers.IO) {
+        val sourceUri = options.getString("sourceUri")
+            ?: throw IllegalArgumentException("sourceUri is required")
+        
+        val degrees = if (options.hasKey("degrees")) {
+            options.getDouble("degrees").toFloat()
+        } else {
+            throw IllegalArgumentException("degrees is required")
+        }
+        
+        val returnFormat = options.getString("returnFormat") ?: "uri"
+        val quality = if (options.hasKey("quality")) {
+            options.getDouble("quality").toFloat()
+        } else {
+            0.9f
+        }
+        val expand = if (options.hasKey("expand")) {
+            options.getBoolean("expand")
+        } else {
+            true
+        }
+        
+        // Load image
+        val bitmap = imageLoader.loadImage(sourceUri)
+        
+        // Create rotation matrix
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        
+        // Apply rotation
+        val rotatedBitmap = if (expand) {
+            // Expand canvas to fit rotated image
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        } else {
+            // Rotate without expanding (may clip)
+            val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+            val canvas = Canvas(result)
+            canvas.rotate(degrees, bitmap.width / 2f, bitmap.height / 2f)
+            canvas.drawBitmap(bitmap, 0f, 0f, null)
+            result
+        }
+        
+        // Prepare result
+        val result = WritableNativeMap()
+        result.putInt("width", rotatedBitmap.width)
+        result.putInt("height", rotatedBitmap.height)
+        
+        // Save to file if URI format requested
+        if (returnFormat == "uri" || returnFormat == "both") {
+            val fileUri = saveBitmapToTemp(rotatedBitmap, quality)
+            result.putString("uri", fileUri)
+        }
+        
+        // Convert to base64 if requested
+        if (returnFormat == "base64" || returnFormat == "both") {
+            val base64 = bitmapToBase64(rotatedBitmap, quality)
+            result.putString("base64", base64)
+        }
+        
+        // Clean up
+        if (bitmap != rotatedBitmap) {
+            bitmap.recycle()
+        }
+        
+        result
     }
 }
 

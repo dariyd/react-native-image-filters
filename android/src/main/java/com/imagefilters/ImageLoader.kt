@@ -99,10 +99,17 @@ class ImageLoader(private val context: Context) {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .submit()
             
-            val bitmap = futureTarget.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            val glideBitmap = futureTarget.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                ?: throw ImageLoaderException("Failed to load remote image: $uri")
+            
+            // Create a mutable copy of the bitmap so we own it and can safely use it
+            // after clearing the Glide target
+            val bitmap = glideBitmap.copy(glideBitmap.config ?: Bitmap.Config.ARGB_8888, true)
+            
+            // Now safe to clear the target since we have our own copy
             Glide.with(context).clear(futureTarget)
             
-            bitmap ?: throw ImageLoaderException("Failed to load remote image: $uri")
+            bitmap ?: throw ImageLoaderException("Failed to copy bitmap")
         } catch (e: Exception) {
             throw ImageLoaderException("Failed to load remote image: ${e.message}")
         }
@@ -131,10 +138,17 @@ class ImageLoader(private val context: Context) {
                 .load(Uri.parse(uri))
                 .submit()
             
-            val bitmap = futureTarget.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            val glideBitmap = futureTarget.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+                ?: throw ImageLoaderException("Failed to load content URI: $uri")
+            
+            // Create a mutable copy of the bitmap so we own it and can safely use it
+            // after clearing the Glide target
+            val bitmap = glideBitmap.copy(glideBitmap.config ?: Bitmap.Config.ARGB_8888, true)
+            
+            // Now safe to clear the target since we have our own copy
             Glide.with(context).clear(futureTarget)
             
-            bitmap ?: throw ImageLoaderException("Failed to load content URI: $uri")
+            bitmap ?: throw ImageLoaderException("Failed to copy bitmap")
         } catch (e: Exception) {
             throw ImageLoaderException("Failed to load content URI: ${e.message}")
         }

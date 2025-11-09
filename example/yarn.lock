@@ -1512,9 +1512,9 @@
     semver "^7.5.2"
 
 "@react-native-community/slider@^5.1.0":
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-5.1.0.tgz#e44d4c66a57732c33e625ea8471aa0a1e8c5ad1c"
-  integrity sha512-79nzA7eXPgM6UMo5ZZ/rrJu8Gai0aRctN6stBHneQYh5Qst98hYD3piY+RQHJhDuCCrpQL85YwGVU4FdDOE3cA==
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-5.1.1.tgz#321c37da565b264fd8f96a4edcb55d3fe78f26aa"
+  integrity sha512-W98If/LnTaziU3/0h5+G1LvJaRhMc6iLQBte6UWa4WBIHDMaDPglNBIFKcCXc9Dxp83W+f+5Wv22Olq9M2HJYA==
 
 "@react-native/assets-registry@0.82.1":
   version "0.82.1"
@@ -2797,9 +2797,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.5.238:
-  version "1.5.248"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.248.tgz#e69941494efbc69ebf2803517f4e85d016013d4b"
-  integrity sha512-zsur2yunphlyAO4gIubdJEXCK6KOVvtpiuDfCIqbM9FjcnMYiyn0ICa3hWfPr0nc41zcLWobgy1iL7VvoOyA2Q==
+  version "1.5.249"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.249.tgz#e4fc3a3e60bb347361e4e876bb31903a9132a447"
+  integrity sha512-5vcfL3BBe++qZ5kuFhD/p8WOM1N9m3nwvJPULJx+4xf2usSlZFJ0qoNYO2fOX4hi3ocuDcmDobtA+5SFr4OmBg==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -5271,7 +5271,7 @@ react-is@^19.1.1:
   integrity sha512-x3Ax3kNSMIIkyVYhWPyO09bu0uttcAIoecO/um/rKGQ4EltYWVYtyiGkS/3xMynrbVQdS69Jhlv8FXUEZehlzA==
 
 "react-native-image-filters@file:..":
-  version "1.0.4"
+  version "1.0.6"
 
 react-native-safe-area-context@^5.5.2:
   version "5.6.2"

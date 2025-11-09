@@ -17,6 +17,27 @@ export interface Spec extends TurboModule {
   applyFilters(optionsArray: Array<Object>): Promise<Array<Object>>;
 
   /**
+   * Crop an image to specified rectangle
+   * @param options Crop options as a dictionary
+   * @returns Promise resolving to cropped image result
+   */
+  cropImage(options: Object): Promise<Object>;
+
+  /**
+   * Resize an image to target dimensions
+   * @param options Resize options as a dictionary
+   * @returns Promise resolving to resized image result
+   */
+  resizeImage(options: Object): Promise<Object>;
+
+  /**
+   * Rotate an image by specified degrees
+   * @param options Rotation options as a dictionary
+   * @returns Promise resolving to rotated image result
+   */
+  rotateImage(options: Object): Promise<Object>;
+
+  /**
    * Get list of available filters
    * @param type Optional filter type ('document', 'photo', or 'custom')
    * @returns Promise resolving to array of filter names

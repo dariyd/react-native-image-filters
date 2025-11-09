@@ -121,7 +121,18 @@ class FilteredImageView(private val context: ThemedReactContext) : AppCompatImag
                 val bitmap = withContext(Dispatchers.IO) {
                     imageLoader.loadImage(uri)
                 }
+                
+                // Swap bitmaps on main thread to avoid race conditions
+                val oldBitmap = currentBitmap
                 currentBitmap = bitmap
+                
+                // Recycle old bitmap after swap to prevent memory leaks
+                oldBitmap?.let { old ->
+                    if (!old.isRecycled && old != bitmap) {
+                        old.recycle()
+                    }
+                }
+                
                 applyFilterAndRender()
             } catch (e: Exception) {
                 sendErrorEvent(e.message ?: "Failed to load image")
@@ -173,7 +184,12 @@ class FilteredImageView(private val context: ThemedReactContext) : AppCompatImag
     
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        currentBitmap?.recycle()
+        // Now we can safely recycle since we own the bitmap (it's a copy)
+        currentBitmap?.let { bitmap ->
+            if (!bitmap.isRecycled) {
+                bitmap.recycle()
+            }
+        }
         currentBitmap = null
     }
 }

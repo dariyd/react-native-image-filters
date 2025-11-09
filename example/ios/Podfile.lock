@@ -1782,7 +1782,7 @@ PODS:
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
     - SocketRocket
-  - react-native-image-filters (1.0.5):
+  - react-native-image-filters (1.0.7):
     - boost
     - DoubleConversion
     - fast_float
@@ -2538,7 +2538,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-image-filters (from `../node_modules/react-native-image-filters`)
+  - "react-native-image-filters (from `../node_modules/@dariyd/react-native-image-filters`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -2663,7 +2663,7 @@ EXTERNAL SOURCES:
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-image-filters:
-    :path: "../node_modules/react-native-image-filters"
+    :path: "../node_modules/@dariyd/react-native-image-filters"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -2776,7 +2776,7 @@ SPEC CHECKSUMS:
   React-logger: fceaaedb9c715923a1900af68a7534e9b3a601a1
   React-Mapbuffer: 7e7ca4c53288117e7e0406e9eaa804bf259b4b30
   React-microtasksnativemodule: 885bebe5c5f25035e1fd0920776078840a0e3a76
-  react-native-image-filters: fffec08a5318f9f2183c20ee2b7e19db3a7d31a4
+  react-native-image-filters: f2faa7f7c25f1f74bb81fb73a973e9fe3505d2d6
   react-native-safe-area-context: 54d812805f3c4e08a4580ad086cbde1d8780c2e4
   react-native-slider: e35799fb9983a19307195d77f10caf5f6a716842
   React-NativeModulesApple: c4bee6aa736092cd347456488a4f97a8e7517604

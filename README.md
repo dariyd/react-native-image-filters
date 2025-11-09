@@ -56,13 +56,13 @@ Interactive cropping, resizing, and rotation with native gesture support:
 ## 📦 Installation
 
 ```sh
-npm install react-native-image-filters
+npm install @dariyd/react-native-image-filters
 ```
 
 or
 
 ```sh
-yarn add react-native-image-filters
+yarn add @dariyd/react-native-image-filters
 ```
 
 ### iOS Setup
@@ -90,7 +90,7 @@ cd ios && pod install
 Display images with live filter effects:
 
 ```tsx
-import { FilteredImageView } from 'react-native-image-filters';
+import { FilteredImageView } from '@dariyd/react-native-image-filters';
 
 function App() {
   const [intensity, setIntensity] = useState(1.0);
@@ -114,7 +114,7 @@ function App() {
 Process images and save the filtered result:
 
 ```tsx
-import { applyFilter } from 'react-native-image-filters';
+import { applyFilter } from '@dariyd/react-native-image-filters';
 
 async function processImage() {
   const result = await applyFilter({
@@ -135,7 +135,7 @@ async function processImage() {
 Let users crop images with touch gestures:
 
 ```tsx
-import { CropperView } from 'react-native-image-filters';
+import { CropperView } from '@dariyd/react-native-image-filters';
 
 function CropScreen() {
   const [cropRect, setCropRect] = useState(null);
@@ -160,7 +160,7 @@ function CropScreen() {
 Perform transformations programmatically:
 
 ```tsx
-import { cropImage, resizeImage, rotateImage } from 'react-native-image-filters';
+import { cropImage, resizeImage, rotateImage } from '@dariyd/react-native-image-filters';
 
 // Crop to specific region
 const cropped = await cropImage({
@@ -195,7 +195,7 @@ const rotated = await rotateImage({
 Process multiple images efficiently:
 
 ```tsx
-import { applyFilters } from 'react-native-image-filters';
+import { applyFilters } from '@dariyd/react-native-image-filters';
 
 async function processMultiple() {
   const results = await applyFilters([
@@ -234,7 +234,7 @@ const result = await applyFilter({
 Cache images for faster processing:
 
 ```tsx
-import { preloadImage } from 'react-native-image-filters';
+import { preloadImage } from '@dariyd/react-native-image-filters';
 
 await preloadImage('https://example.com/large-image.jpg');
 // Image is now cached and ready for instant filtering
@@ -245,7 +245,7 @@ await preloadImage('https://example.com/large-image.jpg');
 Discover all available filters:
 
 ```tsx
-import { getAvailableFilters } from 'react-native-image-filters';
+import { getAvailableFilters } from '@dariyd/react-native-image-filters';
 
 const documentFilters = await getAvailableFilters('document');
 // ['scan', 'blackWhite', 'enhance', 'perspective', 'grayscale', 'colorPop']
@@ -608,8 +608,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
-- 🐛 [Report a Bug](https://github.com/yourusername/react-native-image-filters/issues)
-- 💬 [Ask a Question](https://github.com/yourusername/react-native-image-filters/discussions)
+- 🐛 [Report a Bug](https://github.com/dariyd/react-native-image-filters/issues)
+- 💬 [Ask a Question](https://github.com/dariyd/react-native-image-filters/discussions)
 - 📖 [Read the API Docs](API.md)
 - 📝 [View Changelog](CHANGELOG.md)
 

@@ -22,7 +22,7 @@ import {
   getAvailableFilters,
   type FilterName,
   type CropRect,
-} from 'react-native-image-filters';
+} from '@dariyd/react-native-image-filters';
 
 const { width } = Dimensions.get('window');
 

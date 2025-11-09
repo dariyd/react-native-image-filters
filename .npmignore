@@ -2,6 +2,11 @@
 example/
 assets/
 
+# Lock files and package manager artifacts (development only)
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
 # Common junk / logs
 npm-debug.log*
 yarn-error.log*
@@ -13,9 +18,14 @@ coverage/
 
 # Editor / tooling configs (not needed by consumers)
 .vscode/
+.idea/
 
 # Build caches
 .turbo/
+
+# Development configs (not needed by consumers)
+.eslintrc.js
+.prettierrc.js
 
 # iOS/Android build outputs inside the library (defensive; also handled by package.json files field)
 android/build/
@@ -25,3 +35,4 @@ ios/Pods/
 # Git metadata (defensive)
 .git/
 .gitmodules
+.gitignore

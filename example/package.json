@@ -10,10 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@dariyd/react-native-image-filters": "^1.0.7",
     "@react-native-community/slider": "^5.1.0",
     "react": "19.1.1",
     "react-native": "0.82.1",
-    "react-native-image-filters": "file:../",
     "react-native-safe-area-context": "^5.5.2"
   },
   "devDependencies": {

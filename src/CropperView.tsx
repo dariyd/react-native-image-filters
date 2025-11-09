@@ -4,8 +4,9 @@ import {
   UIManager,
   Platform,
   StyleSheet,
-  ViewStyle,
-  NativeSyntheticEvent,
+  type ViewStyle,
+  type StyleProp,
+  type NativeSyntheticEvent,
 } from 'react-native';
 import type { CropperViewProps, CropRect } from './types';
 
@@ -17,7 +18,7 @@ interface NativeCropperViewProps {
   showGrid?: boolean;
   gridColor?: string;
   overlayColor?: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   onCropRectChange?: (event: NativeSyntheticEvent<{ cropRect: CropRect }>) => void;
   onGestureEnd?: (event: NativeSyntheticEvent<{ cropRect: CropRect }>) => void;
 }
@@ -105,30 +106,31 @@ export const CropperView: React.FC<CropperViewProps> = ({
 
 /**
  * Get the current crop rectangle from the CropperView
+ * Note: This function dispatches a command but does not return the result synchronously.
+ * Use the onCropRectChange callback to get the current crop rect in real-time.
  * @param viewRef Reference to CropperView component
- * @returns Current crop rectangle or null
  */
-export const getCropRect = (viewRef: React.RefObject<any>): CropRect | null => {
+export const getCropRect = (viewRef: React.RefObject<any>): void => {
   if (!viewRef.current) {
-    return null;
+    return;
   }
 
   try {
     const viewManagerConfig = UIManager.getViewManagerConfig(COMPONENT_NAME);
     if (!viewManagerConfig || !viewManagerConfig.Commands) {
-      return null;
+      return;
     }
 
     const commandId = viewManagerConfig.Commands.getCropRect;
 
     if (Platform.OS === 'ios') {
-      return UIManager.dispatchViewManagerCommand(
+      UIManager.dispatchViewManagerCommand(
         viewRef.current,
         commandId,
         []
       );
     } else {
-      return UIManager.dispatchViewManagerCommand(
+      UIManager.dispatchViewManagerCommand(
         viewRef.current,
         'getCropRect',
         []
@@ -136,7 +138,6 @@ export const getCropRect = (viewRef: React.RefObject<any>): CropRect | null => {
     }
   } catch (error) {
     console.error('Failed to get crop rect:', error);
-    return null;
   }
 };
 

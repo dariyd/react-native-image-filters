@@ -1,18 +1,14 @@
-import { NativeModules, Platform } from 'react-native';
-import NativeImageFilters from './NativeImageFilters';
+import { Platform } from 'react-native';
+import NativeImageFilters, { type Spec } from './NativeImageFilters';
 import type {
   ApplyFilterOptions,
   FilterResult,
   FilterType,
   FilterName,
   FilterMetadata,
-  BatchFilterOperation,
-  BatchFilterResult,
   CropImageOptions,
   ResizeImageOptions,
   RotateImageOptions,
-  CropRect,
-  ResizeMode,
 } from './types';
 import { DOCUMENT_FILTERS, getDocumentFilterNames } from './filters/documentFilters';
 import { PHOTO_FILTERS, getPhotoFilterNames } from './filters/photoFilters';
@@ -64,10 +60,10 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const ImageFilters = NativeImageFilters
+const ImageFilters: Spec = NativeImageFilters
   ? NativeImageFilters
   : new Proxy(
-      {},
+      {} as Spec,
       {
         get() {
           throw new Error(LINKING_ERROR);

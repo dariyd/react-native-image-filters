@@ -6,8 +6,9 @@ import {
   StyleSheet,
   View,
   type ViewStyle,
+  type StyleProp,
 } from 'react-native';
-import type { FilteredImageViewProps, ImageSource } from './types';
+import type { FilteredImageViewProps } from './types';
 
 const COMPONENT_NAME = 'FilteredImageView';
 
@@ -18,7 +19,7 @@ interface NativeFilteredImageViewProps {
   intensity: number;
   customParams?: Record<string, any>;
   resizeMode: string;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   onFilterApplied?: () => void;
   onError?: (event: { nativeEvent: { error: string } }) => void;
 }

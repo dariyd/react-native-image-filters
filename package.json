@@ -1,6 +1,6 @@
 {
-  "name": "react-native-image-filters",
-  "version": "1.0.6",
+  "name": "@dariyd/react-native-image-filters",
+  "version": "1.0.8",
   "description": "High-performance GPU-accelerated image filters for React Native with New Architecture support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -30,11 +30,11 @@
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build",
+    "prepack": "npx react-native-builder-bob build",
     "release": "release-it",
     "example": "yarn --cwd example",
     "clean": "del-cli lib",
-    "prepare": "bob build"
+    "prepare": "npx react-native-builder-bob build"
   },
   "keywords": [
     "react-native",
@@ -89,15 +89,16 @@
     "fast-image-processing",
     "mobile-image-editor"
   ],
-  "repository": "https://github.com/yourusername/react-native-image-filters",
+  "repository": "https://github.com/dariyd/react-native-image-filters",
   "author": "Dariy D. <dariyd.soft@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yourusername/react-native-image-filters/issues"
+    "url": "https://github.com/dariyd/react-native-image-filters/issues"
   },
-  "homepage": "https://github.com/yourusername/react-native-image-filters#readme",
+  "homepage": "https://github.com/dariyd/react-native-image-filters#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@react-native/eslint-config": "^0.74.0",
@@ -145,4 +146,3 @@
     ]
   }
 }
-

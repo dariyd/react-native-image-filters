@@ -591,28 +591,6 @@ npm run android
 
 ---
 
-## 🤝 Contributing
-
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-### Development Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/react-native-image-filters.git
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Build TypeScript
-npm run build
-```
-
----
-
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file for details.
@@ -634,6 +612,26 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - 💬 [Ask a Question](https://github.com/yourusername/react-native-image-filters/discussions)
 - 📖 [Read the API Docs](API.md)
 - 📝 [View Changelog](CHANGELOG.md)
+
+---
+
+## 💖 Support the Project
+
+If you find this library helpful, consider supporting its development:
+
+<div align="center">
+
+### ☕ Buy Me a Coffee
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/dariyd)
+
+### 💸 Send via Revolut
+Scan the QR code or use the link below:
+
+<img src="assets/qr_code_r.jpeg" alt="Revolut QR Code" width="200"/>
+
+**[Send on Revolut →](https://revolut.me/darii90)**
+
+</div>
 
 ---
 

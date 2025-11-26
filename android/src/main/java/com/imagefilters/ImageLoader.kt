@@ -3,6 +3,7 @@ package com.imagefilters
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.util.Base64
 import com.bumptech.glide.Glide
@@ -119,16 +120,52 @@ class ImageLoader(private val context: Context) {
         try {
             val path = uri.removePrefix("file://")
             val file = File(path)
-            
+
             if (!file.exists()) {
                 throw ImageLoaderException("File not found: $path")
             }
-            
-            BitmapFactory.decodeFile(path)
+
+            // Decode bitmap from file (raw pixels)
+            val bitmap = BitmapFactory.decodeFile(path)
                 ?: throw ImageLoaderException("Failed to decode image: $path")
+
+            // Normalize orientation using EXIF so that all downstream operations
+            // (filters, crop, resize, rotate) work on an upright bitmap.
+            // This matches how React Native's <Image> displays camera photos, which
+            // already respects EXIF orientation.
+            return@withContext try {
+                val exif = androidx.exifinterface.media.ExifInterface(path)
+                val orientation = exif.getAttributeInt(
+                    androidx.exifinterface.media.ExifInterface.TAG_ORIENTATION,
+                    androidx.exifinterface.media.ExifInterface.ORIENTATION_UNDEFINED
+                )
+
+                val rotated = when (orientation) {
+                    androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90f)
+                    androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180f)
+                    androidx.exifinterface.media.ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270f)
+                    else -> bitmap
+                }
+
+                if (rotated != bitmap) {
+                    bitmap.recycle()
+                }
+
+                rotated
+            } catch (_: Exception) {
+                // If EXIF read fails for any reason, fall back to the raw bitmap
+                bitmap
+            }
         } catch (e: Exception) {
             throw ImageLoaderException("Failed to load local image: ${e.message}")
         }
+    }
+
+    private fun rotateBitmap(source: Bitmap, degrees: Float): Bitmap {
+        if (degrees % 360f == 0f) return source
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
     
     private suspend fun loadContentUri(uri: String): Bitmap = withContext(Dispatchers.IO) {

@@ -30,7 +30,7 @@ android {
     namespace "com.imagefilters"
     
     defaultConfig {
-        minSdk 33
+        minSdk 30
         targetSdk 34
     }
     

@@ -624,12 +624,6 @@ If you find this library helpful, consider supporting its development:
 ### ☕ Buy Me a Coffee
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/dariyd)
 
-### 💸 Send via Revolut
-Scan the QR code or use the link below:
-
-<img src="assets/qr_code_r.jpeg" alt="Revolut QR Code" width="200"/>
-
-**[Send on Revolut →](https://revolut.me/darii90)**
 
 </div>
 
